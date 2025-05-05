@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { loginService } from '../Services/login';
+import { getPaciente } from '../Services/paciente';
 
 const LoginPage = () => {
   const [documentId, setDocumentId] = useState('');
@@ -14,20 +15,24 @@ const LoginPage = () => {
     setError('');
     if (documentId.trim() && birthDate.trim()) {
       try {
-        // Formatear fecha a YYYY-MM-DD
         const fechaNacimiento = birthDate;
         const response = await loginService(documentId, fechaNacimiento);
-        // Respuesta esperada
-        if (
-          response &&
-          response.id &&
-          response.documento === documentId &&
-          response.fechaNacimiento &&
-          response.nombre &&
-          response.apellidos &&
-          response.telefono
-        ) {
-          navigate('/especialidad');
+        // Nuevo flujo: guardar token/documento y consultar paciente
+        if (response && response.token && response.documento) {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('documento', response.documento);
+          // Consultar paciente
+          const paciente = await getPaciente(response.documento, response.token);
+          if (paciente) {
+            localStorage.setItem('user', JSON.stringify(paciente));
+            navigate('/especialidad');
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'No se encontró paciente',
+              text: typeof paciente === 'object' ? JSON.stringify(paciente) : String(paciente),
+            });
+          }
         } else {
           Swal.fire({
             icon: 'error',

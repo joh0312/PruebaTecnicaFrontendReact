@@ -8,11 +8,34 @@ import Confirmation from './pages/Confirmation';
 
 import RouteLoader from './RouteLoader';
 
+
+function PrivateLoginRoute() {
+
+  const token = localStorage.getItem('token');
+  let isValid = false;
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const now = Math.floor(Date.now() / 1000);
+      if (payload.exp && now < payload.exp) {
+        isValid = true;
+      }
+    } catch (e) {
+      isValid = false;
+    }
+  }
+  if (isValid) {
+    return <Navigate to="/especialidad" replace />;
+  }
+  return <LoginPage />;
+}
+
+
 const App = () => {
   return (
     <RouteLoader>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<PrivateLoginRoute />} />
         <Route path="/especialidad" element={<SpecialtySelection />} />
         <Route path="/citas" element={<AppointmentSelection />} />
         <Route path="/confirmacion" element={<Confirmation />} />
