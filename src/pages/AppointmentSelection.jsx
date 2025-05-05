@@ -54,6 +54,7 @@ const AppointmentSelection = () => {
   }, [specialty]);
 
   const handleReserve = async () => {
+    debugger
     if (!selectedAppointment) {
       Swal.fire({
         icon: 'warning',
@@ -72,17 +73,18 @@ const AppointmentSelection = () => {
     });
     if (result.isConfirmed) {
       const paciente = JSON.parse(localStorage.getItem('user'));
-      if (!paciente || !paciente.id) {
+      if (!paciente || !paciente.id) {U
         Swal.fire({ icon: 'error', title: 'No se encontró paciente en sesión.' });
         return;
       }
       const reserva = await reservarCita(selectedAppointment.id, paciente.id);
-      if (reserva && reserva.error) {
-        Swal.fire({ icon: 'error', title: 'Error al reservar', text: reserva.error });
-      } else {
+      console.log(reserva)
+      if (reserva.status) {
         Swal.fire({ icon: 'success', title: 'Cita reservada con éxito' }).then(() => {
           navigate('/confirmacion', { state: { appointment: selectedAppointment, specialty } });
         });
+      } else {
+        Swal.fire({ icon: 'error', title: 'Error al reservar', text: reserva.details });
       }
     }
   };
