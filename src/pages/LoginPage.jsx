@@ -17,11 +17,9 @@ const LoginPage = () => {
       try {
         const fechaNacimiento = birthDate;
         const response = await loginService(documentId, fechaNacimiento);
-        // Nuevo flujo: guardar token/documento y consultar paciente
         if (response && response.token && response.documento) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('documento', response.documento);
-          // Consultar paciente
           const paciente = await getPaciente(response.documento, response.token);
           if (paciente) {
             localStorage.setItem('user', JSON.stringify(paciente));
@@ -56,18 +54,26 @@ const LoginPage = () => {
     <div className="login-wrapper">
       <div className="card" style={{maxWidth: 410, width: '100%'}}>
         <form className="auth-form" onSubmit={handleSubmit}>
-          <h1 className="form-title">Autenticación</h1>
+          <h1 className="form-title" style={{ marginBottom: 28 }}>Autenticación</h1>
+          <label htmlFor="documentId" style={{ display: 'block', marginBottom: 4, marginTop: 0, color: '#444', fontWeight: 500 }}>
+            Documento de identidad
+          </label>
           <input
+            id="documentId"
             type="text"
             className="form-input"
-            placeholder="Documento de identidad"
             value={documentId}
             onChange={e => setDocumentId(e.target.value)}
           />
+          <label htmlFor="birthDate" style={{ display: 'block', marginBottom: 4, marginTop: 14, color: '#444', fontWeight: 500 }}>
+            Fecha de nacimiento
+          </label>
           <input
+            id="birthDate"
             type="date"
             className="form-input"
-            placeholder="Fecha de nacimiento"
+            placeholder="Fecha de nacimiento (nacimiento)"
+            aria-label="Fecha de nacimiento"
             value={birthDate}
             onChange={e => setBirthDate(e.target.value)}
           />

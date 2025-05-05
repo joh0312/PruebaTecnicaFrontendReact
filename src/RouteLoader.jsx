@@ -8,7 +8,7 @@ const RouteLoader = ({ children }) => {
 
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 900); // Duración de la pantalla de carga
+    const timer = setTimeout(() => setLoading(false), 900); 
     return () => clearTimeout(timer);
   }, [location.pathname]);
 

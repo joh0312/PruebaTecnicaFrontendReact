@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const specialties = [
   {
@@ -23,12 +23,45 @@ const SpecialtySelection = () => {
     navigate('/citas', { state: { specialty } });
   };
 
-  // Obtener usuario del localStorage
   const user = JSON.parse(localStorage.getItem('user'));
   const nombreCompleto = user ? `${user.nombre} ${user.apellidos}` : '';
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
+  const location = useLocation();
+
+  const showLogout = location.pathname !== '/login';
+
   return (
-    <div className="login-wrapper">
+    <>
+      {showLogout && (
+        <div style={{ position: 'fixed', right: 18, top: 18, zIndex: 1000 }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              background: '#ef4444',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 20,
+              padding: '7px 18px',
+              fontWeight: 600,
+              fontSize: 15,
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(239,68,68,0.08)',
+              transition: 'background 0.2s',
+              letterSpacing: 1
+            }}
+            onMouseOver={e => (e.currentTarget.style.background = '#dc2626')}
+            onMouseOut={e => (e.currentTarget.style.background = '#ef4444')}
+          >
+            Cerrar sesión
+          </button>
+        </div>
+      )}
+      <div className="login-wrapper">
+
       <h2 style={{textAlign:'center', color:'#444', marginBottom: 12}}>
         {nombreCompleto && `¡Bienvenido, ${nombreCompleto}!`}
       </h2>
@@ -43,6 +76,7 @@ const SpecialtySelection = () => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 

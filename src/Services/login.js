@@ -8,7 +8,6 @@ export async function loginService(documento, fechaNacimiento) {
       documento,
       fechaNacimiento
     });
-    // Verifica si la respuesta es válida y almacena en localStorage
     if (response.data) {
       localStorage.setItem('user', JSON.stringify(response.data));
     }

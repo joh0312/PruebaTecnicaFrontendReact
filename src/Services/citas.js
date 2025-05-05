@@ -4,7 +4,13 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export async function getCitasDisponibles() {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/citas/disponibles`);
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_BASE_URL}/api/citas/disponibles`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: '*/*'
+      }
+    });
     return response.data;
   } catch (error) {
     if (error.response) {

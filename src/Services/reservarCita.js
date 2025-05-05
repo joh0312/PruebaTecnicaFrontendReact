@@ -4,9 +4,12 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export async function reservarCita(idCita, idPaciente) {
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/citas/reservar`, {
-      idCita,
-      idPaciente
+    const token = localStorage.getItem('token');
+    const response = await axios.post(`${API_BASE_URL}/api/reservas`, { idCita, idPaciente }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: '*/*'
+      }
     });
     return response.data;
   } catch (error) {

@@ -2,7 +2,8 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export async function getPaciente(documento, token) {
+export async function getPaciente(documento) {
+  const token = localStorage.getItem('token');
   try {
     const response = await axios.get(`${API_BASE_URL}/api/pacientes/${documento}`,
       {
