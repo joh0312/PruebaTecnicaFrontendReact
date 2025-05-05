@@ -137,7 +137,8 @@ const AppointmentSelection = () => {
             }}
             aria-label="Volver"
           >
-            <span style={{ display: 'inline-block', transform: 'translateX(-1px)' }}>&larr;</span>
+          <span style={{ display: 'inline-block', transform: 'translate(-1px, -2px)' }}>←</span>
+          
           </button>
           <Typography variant="h5" align="center" gutterBottom sx={{ color: '#3b3b3b', fontWeight: 700, fontSize: '2.2rem', mb: 0 }}>
             Selecciona una cita
